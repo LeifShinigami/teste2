@@ -22,13 +22,43 @@
         align-items: center;
         justify-content: center;
       }
+
+      #login {
+        text-align: center;
+      }
+
+      input {
+        padding: 10px;
+        font-size: 16px;
+        background: #111;
+        border: 1px solid #444;
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background: cyan;
+        border: none;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
-    <div id="app">A carregar...</div>
+    <div id="login">
+      <p>Palavra-passe:</p>
+      <input type="password" id="pw" />
+      <br />
+      <button onclick="check()">Entrar</button>
+    </div>
+
+    <div id="app" style="display: none;">A carregar...</div>
 
     <script>
+      const PASS = "xxx"; // <--- tua password
       const app = document.getElementById("app");
+      const login = document.getElementById("login");
 
       function isInApp() {
         return (
@@ -76,17 +106,27 @@
           });
       }
 
-      // 🚀 Lógica principal
-      if (isInSocialWebview()) {
-        window.location.href = "https://curly-path-662902.framer.app/start2";
-      } else if (isInApp()) {
-        window.location.href = "https://curly-path-662902.framer.app/capa";
-      } else if (isSafari()) {
-        showInlinePage("ios.html"); // iOS Safari real
-      } else if (isChrome()) {
-        window.location.href = "open.html"; // Chrome normal
-      } else {
-        showInlinePage("unsupported.html"); // Tudo o resto
+      function check() {
+        const input = document.getElementById("pw").value;
+        if (input === PASS) {
+          login.style.display = "none";
+          app.style.display = "flex";
+
+          // 🚀 Lógica principal
+          if (isInSocialWebview()) {
+            window.location.href = "https://curly-path-662902.framer.app/start2";
+          } else if (isInApp()) {
+            window.location.href = "https://curly-path-662902.framer.app/capa";
+          } else if (isSafari()) {
+            showInlinePage("ios.html"); // iOS Safari real
+          } else if (isChrome()) {
+            window.location.href = "open.html"; // Chrome normal
+          } else {
+            showInlinePage("unsupported.html"); // Tudo o resto
+          }
+        } else {
+          alert("Errado. Vai dormir.");
+        }
       }
     </script>
   </body>
