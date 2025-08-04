@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0" />
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes" />
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icon.png" />
@@ -18,44 +18,17 @@
         width: 100vw;
         height: 100vh;
         overflow: hidden;
-      }
-
-      #login {
-        text-align: center;
-        margin-top: 450px;
-      }
-
-      input {
-        padding: 10px;
-        font-size: 16px;
-        background: #111;
-        border: 1px solid #444;
-        color: white;
-        margin-bottom: 10px;
-      }
-
-      button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background: cyan;
-        border: none;
-        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     </style>
   </head>
   <body>
-    <div id="app">
-      <!-- Login -->
-      <div id="login">
-        <p>Palavra-passe:</p>
-        <input type="password" id="pw" />
-        <br />
-        <button onclick="check()">Entrar</button>
-      </div>
-    </div>
+    <div id="app">A carregar...</div>
 
     <script>
-      const PASS = "xxx"; // troca pela tua password
+      const app = document.getElementById("app");
 
       function isInApp() {
         return (
@@ -66,7 +39,6 @@
 
       function isInSocialWebview() {
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-
         return (
           /\bwv\b|\bWebView\b/i.test(ua) ||
           (
@@ -82,33 +54,39 @@
         return /iPhone|iPad|iPod/i.test(navigator.userAgent);
       }
 
-      function check() {
-        const input = document.getElementById("pw").value;
+      function isSafari() {
+        const ua = navigator.userAgent;
+        return /Safari/i.test(ua) && !/Chrome|CriOS|Edg|OPR|Brave|Firefox/i.test(ua);
+      }
 
-        if (input === PASS) {
-          const app = document.getElementById("app");
+      function isChrome() {
+        const ua = navigator.userAgent;
+        return /Chrome/i.test(ua) && !/Edg|OPR|Brave|Firefox|SamsungBrowser/i.test(ua);
+      }
 
-          if (isInSocialWebview()) {
-            window.location.href = "https://curly-path-662902.framer.app/start2";
-          } else if (isInApp()) {
-            window.location.href = "https://curly-path-662902.framer.app/capa";
-          } else if (isIOS()) {
-            // Carrega ios.html sem mudar a URL
-            fetch("ios.html")
-              .then(res => res.text())
-              .then(html => {
-                const bodyContent = html.split("<body>")[1].split("</body>")[0];
-                app.innerHTML = bodyContent;
-              })
-              .catch(() => {
-                app.innerHTML = "<p>Erro ao carregar instruções para iOS.</p>";
-              });
-          } else {
-            window.location.href = "open.html";
-          }
-        } else {
-          alert("Errado. Vai dormir.");
-        }
+      function showInlinePage(page) {
+        fetch(page)
+          .then(res => res.text())
+          .then(html => {
+            const bodyContent = html.split("<body>")[1].split("</body>")[0];
+            app.innerHTML = bodyContent;
+          })
+          .catch(() => {
+            app.innerHTML = "<p>Erro ao carregar conteúdo.</p>";
+          });
+      }
+
+      // 🚀 Lógica principal
+      if (isInSocialWebview()) {
+        window.location.href = "https://curly-path-662902.framer.app/start2";
+      } else if (isInApp()) {
+        window.location.href = "https://curly-path-662902.framer.app/capa";
+      } else if (isSafari()) {
+        showInlinePage("ios.html"); // iOS Safari real
+      } else if (isChrome()) {
+        window.location.href = "open.html"; // Chrome normal
+      } else {
+        showInlinePage("unsupported.html"); // Tudo o resto
       }
     </script>
   </body>
