@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icon.png" />
+    <title>Peanutbrain</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: black;
+        color: white;
+        font-family: sans-serif;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      #login {
+        text-align: center;
+        margin-top: 450px;
+      }
+
+      input {
+        padding: 10px;
+        font-size: 16px;
+        background: #111;
+        border: 1px solid #444;
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background: cyan;
+        border: none;
+        cursor: pointer;
+      }
+
+      #frame-wrapper {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login -->
+    <div id="login">
+      <p>Palavra-passe:</p>
+      <input type="password" id="pw" />
+      <br />
+      <button onclick="check()">Entrar</button>
+    </div>
+
+    <!-- Iframe de conteúdo -->
+    <div id="frame-wrapper">
+      <iframe id="framer-frame"
+              allow="autoplay; fullscreen"
+              scrolling="yes"></iframe>
+    </div>
+
+    <script>
+      const PASS = "xxx"; // troca pela tua password
+
+      function isInApp() {
+        return (
+          window.matchMedia('(display-mode: standalone)').matches ||
+          window.navigator.standalone === true
+        );
+      }
+
+      function isInSocialWebview() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+        return (
+          /\bwv\b|\bWebView\b/i.test(ua) ||
+          (
+            !window.matchMedia('(display-mode: standalone)').matches &&
+            !window.navigator.standalone &&
+            typeof window.opener === "undefined" &&
+            /Instagram|FBAV|FBAN|Messenger|Line|Snapchat|TikTok|Telegram|Pinterest/i.test(ua)
+          )
+        );
+      }
+
+      function check() {
+        const input = document.getElementById("pw").value;
+
+        if (input === PASS) {
+          let targetUrl = "";
+
+          if (isInSocialWebview()) {
+            targetUrl = "https://curly-path-662902.framer.app/start2";
+          } else if (isInApp()) {
+            targetUrl = "https://curly-path-662902.framer.app/capa";
+          } else {
+            targetUrl = "open.html";
+          }
+
+          document.getElementById("login").style.display = "none";
+          const iframe = document.getElementById("framer-frame");
+          iframe.src = targetUrl;
+          document.getElementById("frame-wrapper").style.display = "block";
+          window.scrollTo(0, 0);
+        } else {
+          alert("Errado. Vai dormir.");
+        }
+      }
+    </script>
+  </body>
+</html>
