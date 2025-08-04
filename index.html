@@ -5,6 +5,7 @@
     <meta name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0" />
     <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icon.png" />
     <title>Peanutbrain</title>
     <style>
@@ -43,12 +44,14 @@
     </style>
   </head>
   <body>
-    <!-- Login -->
-    <div id="login">
-      <p>Palavra-passe:</p>
-      <input type="password" id="pw" />
-      <br />
-      <button onclick="check()">Entrar</button>
+    <div id="app">
+      <!-- Login -->
+      <div id="login">
+        <p>Palavra-passe:</p>
+        <input type="password" id="pw" />
+        <br />
+        <button onclick="check()">Entrar</button>
+      </div>
     </div>
 
     <script>
@@ -75,24 +78,34 @@
         );
       }
 
+      function isIOS() {
+        return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      }
+
       function check() {
         const input = document.getElementById("pw").value;
 
         if (input === PASS) {
-          let targetUrl = "";
+          const app = document.getElementById("app");
 
-if (isInSocialWebview()) {
-  window.location.href = "start2";
-} else if (isInApp()) {
-  window.location.href = "capa";
-} else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-  window.location.href = "ios.html"; // ← aqui entra a nova página
-} else {
-  window.location.href = "open.html";
-}
-
-
-          window.location.href = targetUrl;
+          if (isInSocialWebview()) {
+            window.location.href = "https://curly-path-662902.framer.app/start2";
+          } else if (isInApp()) {
+            window.location.href = "https://curly-path-662902.framer.app/capa";
+          } else if (isIOS()) {
+            // Carrega ios.html sem mudar a URL
+            fetch("ios.html")
+              .then(res => res.text())
+              .then(html => {
+                const bodyContent = html.split("<body>")[1].split("</body>")[0];
+                app.innerHTML = bodyContent;
+              })
+              .catch(() => {
+                app.innerHTML = "<p>Erro ao carregar instruções para iOS.</p>";
+              });
+          } else {
+            window.location.href = "open.html";
+          }
         } else {
           alert("Errado. Vai dormir.");
         }
