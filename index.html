@@ -81,13 +81,16 @@
         if (input === PASS) {
           let targetUrl = "";
 
-          if (isInSocialWebview()) {
-            targetUrl = "https://curly-path-662902.framer.app/start2";
-          } else if (isInApp()) {
-            targetUrl = "https://curly-path-662902.framer.app/capa";
-          } else {
-            targetUrl = "https://teste2-flax-two.vercel.app/open.html";
-          }
+if (isInSocialWebview()) {
+  window.location.href = "start2";
+} else if (isInApp()) {
+  window.location.href = "capa";
+} else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  window.location.href = "ios.html"; // ← aqui entra a nova página
+} else {
+  window.location.href = "open.html";
+}
+
 
           window.location.href = targetUrl;
         } else {
