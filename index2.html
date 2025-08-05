@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Framer Wrapper</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: black;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        color: white;
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #wrapper {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+      }
+      iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="auth">
+      <div>Palavra-passe:</div>
+      <input type="password" id="pw" />
+      <button onclick="check()">Entrar</button>
+    </div>
+    <div id="wrapper">
+      <iframe
+        src="https://curly-path-662902.framer.app/session1"
+        allow="autoplay; fullscreen"
+      ></iframe>
+    </div>
+    <script>
+      const PASS = "jabas123"; // muda aqui
+      function check() {
+        const input = document.getElementById("pw").value;
+        if (input === PASS) {
+          document.getElementById("auth").style.display = "none";
+          document.getElementById("wrapper").style.display = "block";
+        } else {
+          alert("Errado. Vai dormir.");
+        }
+      }
+    </script>
+  </body>
+</html>
